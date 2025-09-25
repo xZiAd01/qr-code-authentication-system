@@ -1,0 +1,7 @@
+flask
+opencv-python
+qrcode
+pandas
+openpyxl
+pdf2image
+requests
