@@ -1,1 +1,712 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Validator - Vehicle Management System</title>
+    <style>
+        /* Color Variables (HSL based) */
+        :root {
+            /* Light Theme - New Colors */
+            --color-primary: hsl(193, 50%, 90%);
+            --color-secondary: hsl(193, 50%, 10%);
+            --color-tertiary: hsl(253, 80%, 20%);
+            --color-accent: hsl(133, 80%, 20%);
+
+            /* Mapping new colors to existing variables for light theme */
+            --bg-gradient-start: var(--color-primary); /* Adjusted based on visual intent */
+            --bg-gradient-end: var(--color-tertiary); /* Adjusted based on visual intent */
+            --section-bg: rgba(var(--color-primary-rgb), 0.95); /* Will require JS for RGB conversion or direct use of HSL if compatible */
+            --section-shadow: rgba(0,0,0,0.2);
+            --header-text: var(--color-secondary); /* Adjusted to ensure contrast */
+            --primary-color: var(--color-tertiary);
+            --primary-light: hsl(193, 50%, 95%); /* A lighter shade of primary */
+            --primary-dark: hsl(253, 80%, 15%); /* A darker shade of tertiary */
+            --button-gradient-start: var(--color-tertiary);
+            --button-gradient-end: hsl(253, 80%, 15%); /* Darker tertiary */
+            --button-shadow: rgba(var(--color-tertiary-rgb),0.4); /* Will require JS for RGB conversion */
+            --button-hover-shadow: rgba(var(--color-tertiary-rgb),0.6); /* Will require JS for RGB conversion */
+            --text-color-dark: var(--color-secondary);
+            --text-color-medium: hsl(193, 50%, 30%); /* Mid-tone secondary */
+            --text-color-light: hsl(193, 50%, 50%); /* Lighter secondary */
+            --border-color: hsl(193, 50%, 80%); /* Lighter primary */
+            --card-bg: white; /* Keep white for light theme card contrast */
+            --card-shadow: rgba(0,0,0,0.1);
+            --info-bg: hsl(193, 50%, 95%); /* Very light primary */
+
+            /* Semantic Colors (adjusted to new palette or similar HSL values) */
+            --success-gradient-start: var(--color-accent);
+            --success-gradient-end: hsl(133, 80%, 15%); /* Darker accent */
+            --success-bg: hsl(133, 80%, 90%);
+            --success-text: hsl(133, 80%, 20%);
+            --success-border: hsl(133, 80%, 70%);
+
+            --warning-bg: hsl(45, 100%, 90%); /* Yellowish for warning */
+            --warning-text: hsl(45, 100%, 40%);
+            --warning-border: hsl(45, 100%, 70%);
+
+            --danger-gradient-start: hsl(0, 80%, 60%); /* Reddish for danger */
+            --danger-gradient-end: hsl(0, 80%, 40%);
+            --danger-bg: hsl(0, 80%, 90%);
+            --danger-text: hsl(0, 80%, 30%);
+            --danger-border: hsl(0, 80%, 70%);
+
+            --info-bg-light: hsl(210, 20%, 90%); /* Grey-blueish for info */
+            --info-text-dark: var(--color-secondary);
+            --info-border-light: hsl(210, 20%, 70%);
+
+            --predictive-alert-bg-start: hsl(0, 80%, 60%);
+            --predictive-alert-bg-end: hsl(0, 80%, 40%);
+            --predictive-alert-inactive-bg: hsl(210, 10%, 50%); /* Mid-grey */
+        }
+
+        /* Dark Theme - New Colors */
+        body.dark-theme {
+            --color-primary: hsl(193, 50%, 10%);
+            --color-secondary: hsl(193, 50%, 90%);
+            --color-tertiary: hsl(253, 80%, 80%);
+            --color-accent: hsl(133, 80%, 80%);
+
+            /* Mapping new colors to existing variables for dark theme */
+            --bg-gradient-start: var(--color-primary);
+            --bg-gradient-end: hsl(193, 50%, 20%); /* Slightly lighter primary for gradient end */
+            --section-bg: rgba(var(--color-primary-rgb), 0.95); /* Will require JS for RGB conversion or direct use of HSL if compatible */
+            --section-shadow: rgba(0,0,0,0.4);
+            --header-text: var(--color-secondary);
+            --primary-color: var(--color-tertiary);
+            --primary-light: hsl(253, 80%, 90%); /* Lighter tertiary */
+            --primary-dark: hsl(253, 80%, 70%); /* Slightly darker tertiary */
+            --button-gradient-start: var(--color-tertiary);
+            --button-gradient-end: hsl(253, 80%, 70%);
+            --button-shadow: rgba(var(--color-tertiary-rgb),0.4); /* Will require JS for RGB conversion */
+            --button-hover-shadow: rgba(var(--color-tertiary-rgb),0.6); /* Will require JS for RGB conversion */
+            --text-color-dark: var(--color-secondary);
+            --text-color-medium: hsl(193, 50%, 70%); /* Mid-tone secondary */
+            --text-color-light: hsl(193, 50%, 50%); /* Darker secondary */
+            --border-color: hsl(193, 50%, 30%); /* Darker primary */
+            --card-bg: hsl(193, 50%, 20%); /* Darker primary for card */
+            --card-shadow: rgba(0,0,0,0.3);
+            --info-bg: hsl(193, 50%, 25%); /* Slightly lighter dark primary */
+
+            /* Semantic Colors for Dark Theme (adjusted to new palette or similar HSL values) */
+            --success-gradient-start: var(--color-accent);
+            --success-gradient-end: hsl(133, 80%, 70%); /* Slightly darker accent */
+            --success-bg: hsl(133, 80%, 30%);
+            --success-text: hsl(133, 80%, 90%);
+            --success-border: hsl(133, 80%, 50%);
+
+            --warning-bg: hsl(45, 100%, 30%);
+            --warning-text: hsl(45, 100%, 90%);
+            --warning-border: hsl(45, 100%, 50%);
+
+            --danger-gradient-start: hsl(0, 80%, 40%);
+            --danger-gradient-end: hsl(0, 80%, 60%);
+            --danger-bg: hsl(0, 80%, 30%);
+            --danger-text: hsl(0, 80%, 90%);
+            --danger-border: hsl(0, 80%, 50%);
+
+            --info-bg-light: hsl(210, 20%, 30%);
+            --info-text-dark: var(--color-secondary);
+            --info-border-light: hsl(210, 20%, 50%);
+
+            --predictive-alert-bg-start: hsl(0, 80%, 40%);
+            --predictive-alert-bg-end: hsl(0, 80%, 60%);
+            --predictive-alert-inactive-bg: hsl(210, 10%, 40%);
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Changed background to a static color */
+            background-color: var(--bg-gradient-start); /* Using the start color for a static background */
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color 0.5s ease; /* Smooth transition for theme change */
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: var(--header-text);
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .upload-section {
+            background: var(--section-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px var(--section-shadow);
+            backdrop-filter: blur(10px);
+            transition: background 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-input {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            background: var(--info-bg);
+            border: 2px dashed var(--primary-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+
+        .file-input-label:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-dark);
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, var(--button-gradient-start), var(--button-gradient-end));
+            border: none;
+            padding: 15px 40px;
+            color: white;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px var(--button-shadow);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--button-hover-shadow);
+        }
+
+        .results-section {
+            background: var(--section-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--section-shadow);
+            backdrop-filter: blur(10px);
+            transition: background 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .error-box {
+            background: linear-gradient(45deg, var(--danger-gradient-start), var(--danger-gradient-end));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .success-header {
+            background: linear-gradient(45deg, var(--success-gradient-start), var(--success-gradient-end));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .success-header h2 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .customer-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 30px;
+            background: var(--info-bg);
+            transition: background 0.5s ease;
+        }
+
+        .customer-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            transition: background 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .customer-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            transition: color 0.5s ease, border-color 0.5s ease;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--text-color-medium);
+            display: flex;
+            align-items: center;
+            transition: color 0.5s ease;
+        }
+
+        .info-value {
+            color: var(--text-color-dark);
+            padding: 5px 10px;
+            background: var(--info-bg);
+            border-radius: 5px;
+            transition: color 0.5s ease, background 0.5s ease;
+        }
+
+        .vehicles-section {
+            padding: 30px;
+        }
+
+        .vehicles-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .vehicles-header h3 {
+            color: var(--primary-color);
+            font-size: 1.5em;
+            transition: color 0.5s ease;
+        }
+
+        .vehicle-count {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: background 0.5s ease;
+        }
+
+        .vehicles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        .vehicle-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            transition: transform 0.3s ease, background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .vehicle-header {
+            background: linear-gradient(45deg, var(--text-color-medium), var(--text-color-dark));
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: background 0.5s ease;
+        }
+
+        .vehicle-body {
+            padding: 20px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+        }
+
+        .status-operational {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid var(--success-border);
+        }
+
+        .status-maintenance {
+            background: var(--warning-bg);
+            color: var(--warning-text);
+            border: 1px solid var(--warning-border);
+        }
+
+        .status-parts {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border: 1px solid var(--danger-border);
+        }
+
+        .status-idle {
+            background: var(--info-bg-light);
+            color: var(--info-text-dark);
+            border: 1px solid var(--info-border-light);
+        }
+
+        .maintenance-section {
+            background: var(--info-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            transition: background 0.5s ease;
+        }
+
+        .maintenance-title {
+            font-weight: 600;
+            color: var(--text-color-medium);
+            margin-bottom: 10px;
+            transition: color 0.5s ease;
+        }
+
+        .predictive-alert {
+            background: linear-gradient(45deg, var(--predictive-alert-bg-start), var(--predictive-alert-bg-end));
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: background 0.5s ease;
+        }
+
+        .predictive-alert.inactive {
+            background: var(--predictive-alert-inactive-bg);
+            opacity: 0.7;
+        }
+
+        .date-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .date-item {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: var(--card-bg);
+            border-radius: 6px;
+            margin: 0 5px;
+            transition: background 0.5s ease;
+        }
+
+        .date-label {
+            font-size: 0.9em;
+            color: var(--text-color-light);
+            margin-bottom: 5px;
+            transition: color 0.5s ease;
+        }
+
+        .date-value {
+            font-weight: 600;
+            color: var(--text-color-dark);
+            transition: color 0.5s ease;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .customer-overview {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .vehicles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .date-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .date-item {
+                margin: 0;
+            }
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.8em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 Vehicle Management System</h1>
+            <p>QR Code Validator & Customer Information Portal</p>
+        </div>
+
+        <div class="upload-section">
+            <form method="POST" action="/" enctype="multipart/form-data" class="upload-form">
+                <div class="file-input-wrapper">
+                    <input type="file" name="file" id="file" class="file-input" accept=".png,.jpg,.jpeg,.pdf" required>
+                    <label for="file" class="file-input-label">
+                        📁 Choose QR Code Image
+                    </label>
+                </div>
+                <button type="submit" class="upload-btn">🔍 Validate QR Code</button>
+            </form>
+        </div>
+
+        {% if result %}
+            <div class="results-section">
+                {% if result.error %}
+                    <div class="error-box">
+                        ❌ {{ result.error }}
+                    </div>
+                {% elif result.success %}
+                    <div class="success-header">
+                        <h2>✅ Valid QR Code - Customer Found</h2>
+                        <p>Customer information and vehicle details loaded successfully</p>
+                    </div>
+
+                    {% set customer_info = result.data[0] %}
+                    <div class="customer-overview">
+                        <div class="customer-card">
+                            <h3>👤 Customer Information</h3>
+                            <div class="info-grid">
+                                <div class="info-label">Customer ID:</div>
+                                <div class="info-value">{{ customer_info.customer_id }}</div>
+                                <div class="info-label">Full Name:</div>
+                                <div class="info-value">{{ customer_info.first_name }} {{ customer_info.last_name }}</div>
+                                <div class="info-label">Total Vehicles:</div>
+                                <div class="info-value">{{ customer_info['number of cars'] }}</div>
+                                <div class="info-label">Membership Status:</div>
+                                <div class="info-value">{{ customer_info.expiration_date }}</div>
+                            </div>
+                        </div>
+
+                        <div class="customer-card">
+                            <h3>📊 Account Summary</h3>
+                            {% set operational_count = result.data|selectattr('status', 'equalto', 'Operational')|list|length %}
+                            {% set maintenance_count = result.data|selectattr('status', 'equalto', 'Under Maintenance')|list|length %}
+                            {% set parts_count = result.data|selectattr('status', 'equalto', 'Awaiting Parts')|list|length %}
+                            {% set idle_count = result.data|selectattr('status', 'equalto', 'Idle')|list|length %}
+                            
+                            <div class="info-grid">
+                                <div class="info-label">Operational Vehicles:</div>
+                                <div class="info-value">{{ operational_count }}</div>
+                                <div class="info-label">Under Maintenance:</div>
+                                <div class="info-value">{{ maintenance_count }}</div>
+                                <div class="info-label">Awaiting Parts:</div>
+                                <div class="info-value">{{ parts_count }}</div>
+                                <div class="info-label">Idle Vehicles:</div>
+                                <div class="info-value">{{ idle_count }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vehicles-section">
+                        <div class="vehicles-header">
+                            <h3>🚙 Vehicle Details</h3>
+                            <div class="vehicle-count">{{ result.data|length }} Vehicle{{ 's' if result.data|length > 1 else '' }}</div>
+                        </div>
+
+                        <div class="vehicles-grid">
+                            {% for vehicle in result.data %}
+                            <div class="vehicle-card">
+                                <div class="vehicle-header">
+                                    {{ vehicle.car_make }} {{ vehicle.car_model }}
+                                </div>
+                                <div class="vehicle-body">
+                                    <div class="status-badge 
+                                        {% if vehicle.status == 'Operational' %}status-operational
+                                        {% elif vehicle.status == 'Under Maintenance' %}status-maintenance
+                                        {% elif vehicle.status == 'Awaiting Parts' %}status-parts
+                                        {% else %}status-idle{% endif %}">
+                                        {{ vehicle.status }}
+                                    </div>
+
+                                    <div class="info-grid">
+                                        <div class="info-label">VIN:</div>
+                                        <div class="info-value">{{ vehicle.car_vin }}</div>
+                                        <div class="info-label">Make & Model:</div>
+                                        <div class="info-value">{{ vehicle.car_make }} {{ vehicle.car_model }}</div>
+                                    </div>
+
+                                    <div class="maintenance-section">
+                                        <div class="maintenance-title">🔧 Maintenance Information</div>
+                                        
+                                        <div class="date-info">
+                                            <div class="date-item">
+                                                <div class="date-label">Last Service</div>
+                                                <div class="date-value">{{ vehicle.last_maintenance_date }}</div>
+                                            </div>
+                                            <div class="date-item">
+                                                <div class="date-label">Next Due</div>
+                                                <div class="date-value">{{ vehicle.next_maintenance_due }}</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="info-grid">
+                                            <div class="info-label">Requirements:</div>
+                                            <div class="info-value">{{ vehicle.maintenance_requirements }}</div>
+                                        </div>
+
+                                        {% if vehicle.predictive_maintenance_alert == 'True' %}
+                                            <div class="predictive-alert">
+                                                🚨 Predictive Maintenance Alert
+                                                <br>Remaining Life: {{ vehicle.remaining_useful_life }}
+                                            </div>
+                                        {% else %}
+                                            <div class="predictive-alert inactive">
+                                                ✅ No Predictive Alerts
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="error-box">
+                        ❌ {{ result }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <button class="theme-toggle" id="theme-toggle">💡</button>
+
+    <script>
+        // Add file name display
+        document.getElementById('file').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                const label = document.querySelector('.file-input-label');
+                label.innerHTML = `📁 Selected: ${fileName}`;
+            }
+        });
+
+        // Add loading state with proper form handling
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const btn = document.querySelector('.upload-btn');
+            const fileInput = document.getElementById('file');
+            
+            // Check if file is selected
+            if (!fileInput.files.length) {
+                e.preventDefault();
+                alert('Please select a file first!');
+                return;
+            }
+            
+            // Show loading state
+            btn.innerHTML = '🔄 Processing...';
+            btn.disabled = true;
+            
+            // Reset button after a timeout (fallback)
+            setTimeout(() => {
+                btn.innerHTML = '🔍 Validate QR Code';
+                btn.disabled = false;
+            }, 10000); // Reset after 10 seconds
+        });
+
+        // Reset button when page loads (in case of redirect back)
+        window.addEventListener('load', function() {
+            const btn = document.querySelector('.upload-btn');
+            btn.innerHTML = '🔍 Validate QR Code';
+            btn.disabled = false;
+
+            // Apply saved theme on load
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.body.classList.add(savedTheme);
+            }
+            updateThemeToggleIcon();
+        });
+
+        // Theme Toggle Logic
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            let theme = 'light-theme'; // Default to light theme
+            if (document.body.classList.contains('dark-theme')) {
+                theme = 'dark-theme';
+            }
+            localStorage.setItem('theme', theme);
+            updateThemeToggleIcon();
+        });
+
+        function updateThemeToggleIcon() {
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (document.body.classList.contains('dark-theme')) {
+                themeToggleBtn.textContent = '☀️'; // Sun icon for light mode
+            } else {
+                themeToggleBtn.textContent = '💡'; // Lightbulb icon for dark mode
+            }
+        }
+    </script>
+</body>
+</html>
